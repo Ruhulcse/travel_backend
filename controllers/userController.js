@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const crypto = require("crypto");
-const knex = require("../db/db");
 const { sendMail } = require("../helpers/mail");
-const RegistrationMailTemplate = require("../mail_templates/registrationMail");
 const {
   hashPassword,
   comparePassword,
@@ -386,10 +384,10 @@ module.exports.greetMsgUpdate = asyncHandler(async (req, res) => {
 // User Image upload
 module.exports.uploadUserImage = asyncHandler(async (req, res) => {
   const { file } = req;
-  console.log('file---',file);
-  console.log('file path',file.path);
-  const image = file.path.split('public')[1]
-  console.log('imageeee',image);
+  console.log("file---", file);
+  console.log("file path", file.path);
+  const image = file.path.split("public")[1];
+  console.log("imageeee", image);
   await knex("Users").update({ image });
 
   return res.status(201).json({

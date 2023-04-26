@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
-const { sendMail } = require("../helpers/mail");
+// const { sendMail } = require("../helpers/mail");
 const { generateToken } = require("../helpers/common");
 // const jwt = require("../helpers/jwt");
 
@@ -60,38 +60,6 @@ module.exports.registration = asyncHandler(async (req, res) => {
       data: createUser,
     });
   } catch (error) {
-    res.status(500).json({
-      error: true,
-      message: "Something went wrong!!",
-      data: null,
-    });
-  }
-});
-
-// Check Email Exist
-module.exports.checkEmailExist = asyncHandler(async (req, res) => {
-  try {
-    const { email } = req.body;
-    isUserExist = await knex("Users")
-      .select("name")
-      .first()
-      .where("email", email);
-    if (isUserExist) {
-      return res
-        .status(409) //conflict
-        .json({
-          error: true,
-          message: "This email has been already registered",
-          data: [],
-        });
-    }
-    res.status(200).json({
-      error: false,
-      message: "This email is new.",
-      data: null,
-    });
-  } catch (error) {
-    console.error(error);
     res.status(500).json({
       error: true,
       message: "Something went wrong!!",

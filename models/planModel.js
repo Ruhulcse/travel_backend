@@ -18,6 +18,9 @@ const planSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    api_id: {
+      type: String,
+    },
     description: {
       type: String,
       required: true,

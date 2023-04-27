@@ -66,7 +66,7 @@ const getPlans = asyncHandler(async (req, res) => {
 
 const updatePlan = asyncHandler(async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ["name", "limit", "price", "description"];
+  const allowedUpdates = ["name", "limit", "price", "description", "api_id"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );

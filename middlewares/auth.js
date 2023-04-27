@@ -1,21 +1,28 @@
-const jwt = require("../helpers/jwt");
-module.exports.authorize = async function (req, res, next) {
-  let token =
-    req.header("authorization") || req.header("token") || req.query.token;
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/userModel");
+
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+      next();
+    } catch (error) {
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+  }
   if (!token) {
-    return next(new Error("user not authorized"));
+    res.status(401);
+    throw new Error("Not authorized, not token");
   }
-  if (token.split("Bearer ").length > 1) {
-    token = token.split("Bearer ")[1];
-  }
-  // check token
-  const payload = await jwt.decode(token);
-  if (!payload)
-    return res.status(401).json({
-      error: true,
-      message: "Auth User Unauthorized",
-      data: null,
-    });
-  req.user = payload;
-  next();
+});
+module.exports = {
+  protect,
 };

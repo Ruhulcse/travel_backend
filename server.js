@@ -31,7 +31,7 @@ app.use(logger("dev"));
 app.use(helmet());
 
 // Use custom middleware
-app.use("/api", auth.protect);
+// app.use("/api", auth.protect);
 
 // Set up routes
 app.use(routes);

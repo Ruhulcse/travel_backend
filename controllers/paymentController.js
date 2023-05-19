@@ -1,7 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const Stripe = require("stripe");
 
-const stripe = new Stripe(process.env.STRIPE);
+const stripe = require("stripe")(
+  "sk_test_51MhzlcJggWefJ04ANPv4Gf4MCvQCWWyjeeAWByiT8ncL3FgYbMfQ0HZYoihqDYXIqltVKsBwUFkhaMwyhxbaTeTk002Z92cnlV"
+);
+
+const YOUR_DOMAIN = "http://localhost:3000/";
+
 const createSubscription = asyncHandler(async (req, res) => {
   try {
     const { name, email, paymentMethod, priceId } = req.body;
@@ -59,7 +64,30 @@ const unSubscriped = asyncHandler(async (req, res) => {
     });
   } catch (error) {}
 });
+const checkoutSession = asyncHandler(async (req, res) => {
+  console.log("api called");
+  const { price } = req.body;
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: `${price}`,
+          quantity: 1,
+        },
+      ],
+      mode: "subscription",
+      success_url: `${YOUR_DOMAIN}?success=true`,
+      cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+    });
+    console.log(session);
+    // res.redirect(303, session.url);
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = {
   createSubscription,
   unSubscriped,
+  checkoutSession,
 };

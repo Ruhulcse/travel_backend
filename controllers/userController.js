@@ -34,7 +34,7 @@ module.exports.login = asyncHandler(async (req, res) => {
   }
 });
 
-// Registration for Users
+// Registration for Users only
 module.exports.registration = asyncHandler(async (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 

@@ -1,20 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const {
-  registration,
-  login,
-  forgotPassword,
-  resetPassword,
-  checkEmailExist,
-  checkToken,
-} = require("../controllers/userController");
-const { upload } = require("../middlewares/imageUpload");
+const { registration, login } = require("../controllers/userController");
+const { getAll, create } = require("../controllers/contactController");
 
 router.post("/register", registration);
 router.post("/login", login);
-// router.post("/forgot-password", forgotPassword);
-// router.post("/reset-password", resetPassword);
-// router.post("/email-check", checkEmailExist);
-// router.post("/token-check", checkToken);
-
+router.post("/create", create);
+router.get("/get_content", getAll);
 module.exports = router;
